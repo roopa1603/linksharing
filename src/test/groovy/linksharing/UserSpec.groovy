@@ -1,14 +1,13 @@
-package sample
+package linksharing
 
 import grails.test.mixin.TestFor
-import linksharing.LoginService
 import spock.lang.Specification
 
 /**
- * See the API for {@link grails.test.mixin.services.ServiceUnitTestMixin} for usage instructions
+ * See the API for {@link grails.test.mixin.domain.DomainClassUnitTestMixin} for usage instructions
  */
-@TestFor(LoginService)
-class LoginServiceSpec extends Specification {
+@TestFor(User)
+class UserSpec extends Specification {
 
     def setup() {
     }

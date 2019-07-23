@@ -1,14 +1,14 @@
 package sample
 
 import grails.test.mixin.TestFor
-import linksharing.SignupService
+
 import spock.lang.Specification
 
 /**
- * See the API for {@link grails.test.mixin.services.ServiceUnitTestMixin} for usage instructions
+ * See the API for {@link grails.test.mixin.domain.DomainClassUnitTestMixin} for usage instructions
  */
-@TestFor(SignupService)
-class SignupServiceSpec extends Specification {
+@TestFor(Document)
+class DocumentSpec extends Specification {
 
     def setup() {
     }

@@ -6,7 +6,7 @@ class LoginController {
 
     def index() {
 
-        render(loginService.loginMethod(params))
+        loginMethod(params)
 
 
 

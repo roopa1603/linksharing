@@ -155,7 +155,7 @@ dataSource {
 environments {
     development {
         dataSource {
-            dbCreate = 'create-drop'
+            dbCreate = 'update'
             url = 'jdbc:oracle:thin:@127.0.0.1:1521/orcl'
             username = 'roopa'
             password = 'roopa'
