@@ -105,9 +105,7 @@
           </div>
           <div class="form-group">
             <div class=" col-md-10">
-              <g:link controller="resetPassword">
               <a href="#" class="control-label col-md-8" style="text-align: left;">Forget Password</a>
-              </g:link>
             </div>
             <div class=" offset-md-1">
               <button type="submit" class="btn btn-basic">Login</button>
