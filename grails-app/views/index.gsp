@@ -1,6 +1,5 @@
-<%@ page import="linksharing.User" %>
-
-
+<%@page import="grails.util.Holders"%>
+<!doctype html>
 <html>
 <head>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="4nonymous">
@@ -11,7 +10,7 @@
     <div class="panel-body">
       <div class="container">
         <div class="col-md-8">
-          <h4><a href="#"><strong> <u>Link Sharing</u></strong></a></h4>
+          <h4><a href="${Holders.config.server.host}"><strong> <u>Link Sharing</u></strong></a></h4>
         </div>
         <div class="col-md-3">
           <div class="input-group">
@@ -25,6 +24,7 @@
         </div>
       </div>
     </div>
+
   </div>
   <div class="col-md-7">
     <div class="panel panel-default">
@@ -36,7 +36,10 @@
           <td width=150px class="text-muted">@Roopa Sabri</td>
           <td width=150px></td>
           <td width=150px></td>
-          <td width=150px><a href="#">Grails</a></td>
+          <td width=150px>
+            <a href="#"></a>
+            Grails
+          </td>
         </tr>
           <td colspan="5" ></td>
         </tr>
@@ -89,23 +92,22 @@
     <div class="panel panel-default">
       <div class="panel-heading">Login</div>
       <div class="panel-body">
-
-        <g:form class="form-horizontal" url="[controller:'Signup',action:'login']">
+        <g:form class="form-horizontal" url="[controller:'login',action:'index']">
           <div class="form-group">
             <text class="control-label col-md-4" for="email"  style="text-align: left;">Email/Username *</text>
             <div class="col-md-8">
-              <input type="text" class="form-control" id="loginEmail" placeholder="Enter email" name="loginEmail">
+              <input type="email" class="form-control" id="email" placeholder="Enter email" name="email">
             </div>
           </div>
           <div class="form-group">
             <text class="control-label col-md-4 " for="pwd" style="text-align: left;">Password *</text>
             <div class="col-md-8">
-              <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="s_pwd">
+              <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="pwd">
             </div>
           </div>
           <div class="form-group">
             <div class=" col-md-10">
-              <a href="#" class="control-label col-md-8" style="text-align: left;">Forget Password</a>
+              %{--                  <g:link action="reset" class="control-label col-md-8" style="text-align: left;">Forget Password</g:link>--}%
             </div>
             <div class=" offset-md-1">
               <button type="submit" class="btn btn-basic">Login</button>
@@ -114,18 +116,23 @@
         </g:form>
       </div>
     </div>
+
+
+
+
     <div class="panel panel-default">
       <div class="panel-heading">Register</div>
       <div class="panel-body">
-        <g:form class="form-horizontal" url="[controller:'signup',action:'index']" >
+        <g:uploadForm class="form-horizontal" controller='signup' action='index'>
           <div class="form-group">
-            <text class="control-label col-md-4" for="firstname" style="text-align: left;">First Name *</text>
+            <text class="control-label col-md-4" for="firstName" style="text-align: left;">First Name *</text>
             <div class="col-md-8">
               <input type="text" class="form-control" id="firstname" placeholder="Enter firstname" name="firstname">
             </div>
           </div>
+
           <div class="form-group">
-            <text class="control-label col-md-4" for="lastname" style="text-align: left;">Last Name *</text>
+            <text class="control-label col-md-4" for="lastName" style="text-align: left;">Last Name *</text>
             <div class="col-md-8">
               <input type="text" class="form-control" id="lastname" placeholder="Enter lastname" name="lastname">
             </div>
@@ -133,7 +140,7 @@
           <div class="form-group">
             <text class="control-label col-md-4" for="email" style="text-align: left;">Email *</text>
             <div class="col-md-8">
-              <input type="email" class="form-control" id="email" placeholder="Enter email" name="email">
+              <input type="email" class="form-control" id="sign_email" placeholder="Enter email" name="signup_email">
             </div>
           </div>
           <div class="form-group">
@@ -145,30 +152,38 @@
           <div class="form-group">
             <text class="control-label col-md-4" for="password" style="text-align: left;">Password *</text>
             <div class="col-md-8">
-              <input type="password" class="form-control" id="password" placeholder="Enter password" name="password">
+              <input type="password" class="form-control" id="password" placeholder="Enter password" name="password" >
             </div>
           </div>
-
           <div class="form-group">
             <text class="control-label col-md-4" for="password" style="text-align: left;">ConfirmPassword*</text>
             <div class="col-md-8">
-              <input type="password" class="form-control" id="confirmpassword" placeholder="Enter password again" name="confirmpassword">
+              <input type="password" class="form-control" id="confirmpassword" placeholder="Enter password again" name="confirmpassword" onkeyup='Matchpassword()'>
             </div>
           </div>
 
+          <div>
+            <span id="matching"></span>
+          </div>
+
+          <div class="form-group">
+            <text class="control-label col-md-4 " for="photo" style="text-align: left;">Photo</text>
+            <div class="col-md-8">
+              <input type="file" class="form-control" id="photo" placeholder="choose" name="inputphoto">
+            </div>
+          </div>
 
           <div class="form-group">
             <div class=" col-md-8">
             </div>
             <div class=" col-md-4">
-              <button type="submit" class="btn btn-basic btn-block" width=100%>Register</button>
+              <button type="submit" class="btn btn-basic btn-block"  width=100%>Register</button>
             </div>
           </div>
-        </g:form>
+        </g:uploadForm>
       </div>
     </div>
   </div>
 </div>
 </body>
 </html>
-

@@ -7,7 +7,7 @@ class User {
     String username
     String email
     String password
-    //Byte[] photo
+    String photo
     Boolean admin
     Boolean active
     Date dateCreated
@@ -24,7 +24,7 @@ class User {
         email(unique: true)
         username(unique:true)
         password blank :false, nullable : false,minSize: 4, maxSize: 32
-        //photo(size:0..5000000)
+        photo nullable: true
     }
 
     static mapping = {

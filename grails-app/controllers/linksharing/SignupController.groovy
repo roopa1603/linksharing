@@ -2,22 +2,13 @@ package linksharing
 
 class SignupController {
 
-        def signupService
-        def loginService
+    def signupService
 
-        def index(){
-            //print "inside cont"
-            signupService.register(params)
-
-    }
-
-    def login() {
-
-        Integer loginValue = loginService.loginMethod(params)
-        if(loginValue==1) {
-            render(text: "Logged In")
-        }else{
-            render(text: "wrong password")
-        }
+    def index(){
+//        print "inside cont"
+//        def file = params.get("pic")
+//        println "pic ==================================" + file.class
+        signupService.register(params,request)
+        render(text: "Success")
     }
 }
