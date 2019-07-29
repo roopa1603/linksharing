@@ -6,8 +6,8 @@ import spock.lang.Specification
 /**
  * See the API for {@link grails.test.mixin.web.ControllerUnitTestMixin} for usage instructions
  */
-@TestFor(ResetPasswordController)
-class ResetPasswordControllerSpec extends Specification {
+@TestFor(ForgetPasswordController)
+class ForgetPasswordControllerSpec extends Specification {
 
     def setup() {
     }

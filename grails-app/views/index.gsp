@@ -1,8 +1,27 @@
 <%@page import="grails.util.Holders"%>
 <!doctype html>
-<html>
+<html xmlns="http://www.w3.org/1999/html">
 <head>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="4nonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script type="text/javascript">
+
+    var validatePassword=function()  {
+      var password = document.getElementById("password").value;
+      var confirmPassword = document.getElementById("confirmpassword").value;
+      if (password != confirmPassword) {
+        //document.getElementById("validate" ).innerHTML= "Not Match!!!!"
+        alert("Passwords are not same")
+        document.getElementById("password").value = "";
+        document.getElementById("confirmpassword").value = "";
+        //return false;
+      } else{
+        document.getElementById("validate").innerHTML = "Match!!!!"
+        //return true;
+      }
+    }
+
+  </script>
 </head>
 <body>
 <div class="container"><br>
@@ -107,7 +126,7 @@
           </div>
           <div class="form-group">
             <div class=" col-md-10">
-              %{--                  <g:link action="reset" class="control-label col-md-8" style="text-align: left;">Forget Password</g:link>--}%
+              <g:link class="control-label col-md-8" style="text-align: left" controller="forgetPassword" action="forgetpassword">Forget Password</g:link>
             </div>
             <div class=" offset-md-1">
               <button type="submit" class="btn btn-basic">Login</button>
@@ -116,6 +135,7 @@
         </g:form>
       </div>
     </div>
+
 
 
 
@@ -158,13 +178,13 @@
           <div class="form-group">
             <text class="control-label col-md-4" for="password" style="text-align: left;">ConfirmPassword*</text>
             <div class="col-md-8">
-              <input type="password" class="form-control" id="confirmpassword" placeholder="Enter password again" name="confirmpassword" onkeyup='Matchpassword()'>
+              <input type="password" class="form-control" id="confirmpassword" placeholder="Enter password again" name="confirmpassword" onfocusout="validatePassword()">
+            </div>
+            <div>
+            <span id="validate" style="color: #a60000"></span>
             </div>
           </div>
 
-          <div>
-            <span id="matching"></span>
-          </div>
 
           <div class="form-group">
             <text class="control-label col-md-4 " for="photo" style="text-align: left;">Photo</text>
@@ -177,13 +197,11 @@
             <div class=" col-md-8">
             </div>
             <div class=" col-md-4">
-              <button type="submit" class="btn btn-basic btn-block"  width=100%>Register</button>
+              <button type="submit" class="btn btn-basic btn-block"  width=100% id="register">Register</button>
             </div>
           </div>
         </g:uploadForm>
       </div>
-    </div>
-  </div>
 </div>
 </body>
 </html>

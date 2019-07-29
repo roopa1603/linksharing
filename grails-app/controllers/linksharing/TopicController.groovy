@@ -6,14 +6,22 @@ import grails.transaction.Transactional
 @Transactional(readOnly = true)
 class TopicController {
 
-    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
+   // static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
-    def index(Integer max) {
+   /* def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
         respond Topic.list(params), model:[topicCount: Topic.count()]
+    }*/
+    def topicService
+    // static defaultAction = "enterTopics"
+    def save() {
+        println params
+        String email = session.name
+        topicService.save(params, email)
+        redirect(controller: "dashboard", action: "index")
     }
 
-    def show(Topic topic) {
+    /*def show(Topic topic) {
         respond topic
     }
 
@@ -103,5 +111,5 @@ class TopicController {
             }
             '*'{ render status: NOT_FOUND }
         }
-    }
+    }*/
 }

@@ -25,6 +25,11 @@ class User {
         username(unique:true)
         password blank :false, nullable : false,minSize: 4, maxSize: 32
         photo nullable: true
+        /*password(validator: {val, obj->
+            if(val.equals(obj.firstName)){
+                return false
+            }
+        })*/
     }
 
     static mapping = {

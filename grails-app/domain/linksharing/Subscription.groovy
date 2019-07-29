@@ -10,5 +10,5 @@ class Subscription {
     Seriousness seriousness
 
 
-    static belongsTo = [topics: Topic, users: User]
+    static belongsTo = [topics: Topic, user: User]
 }

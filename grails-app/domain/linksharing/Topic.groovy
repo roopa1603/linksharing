@@ -7,12 +7,12 @@ import com.sample.Visibility
 class Topic {
 
     String name
-    User createdBy
+    //User createdBy
     Visibility visibility
 
     Date dateCreated
     Date lastUpdated
 
     static belongsTo = [user: User]
-    static hasMany = [resources: Resource, subscriptions: Subscription]
+    static hasMany = [resourceHas: Resource, subscriptions1: Subscription]
 }

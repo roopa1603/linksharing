@@ -8,7 +8,8 @@ class Resource {
     Date dateCreated
     Date lastUpdated
 
-    static belongsTo = [topic: Topic]
+    static belongsTo = [topic: Topic,user: User]
+    static hasMany = [readingItems: ReadingItem,resourceRated:ResourceRating]
 
     static mapping = {
         table 'Resources'
