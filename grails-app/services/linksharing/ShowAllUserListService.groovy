@@ -7,8 +7,8 @@ class ShowAllUserListService {
 
     def listMethod() {
 
-        List showList =  User.list()
-        return showList
+        List showlist = User.list()
+        return showlist;
 
     }
 }

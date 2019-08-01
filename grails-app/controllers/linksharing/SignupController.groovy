@@ -3,12 +3,20 @@ package linksharing
 class SignupController {
 
     def signupService
-
     def index(){
-//        print "inside cont"
-//        def file = params.get("pic")
-//        println "pic ==================================" + file.class
-        signupService.register(params,request)
-        render(text: "Success")
+        def value = signupService.register(params,request)
+        if(value)
+        {
+            flash.message = "Login sucess"
+            session.name = params.signup_email
+            redirect(controller: "dashboard", action: "index")
+        }
+        else
+        {
+            flash.message = "Login Fail"
+            render(text: "register failed")
+        }
+
     }
 }
+

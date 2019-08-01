@@ -1,5 +1,3 @@
-
-
 grails {
     profile = 'web'
     codegen {
@@ -107,6 +105,18 @@ grails {
             }
         }
     }
+    grails {
+        mail {
+            host = "smtp.gmail.com"
+            port = 465
+            username = "linksharing.roopa@gmail.com"
+            password = "linksharing"
+            props = ["mail.smtp.auth"                  : "true",
+                     "mail.smtp.socketFactory.port"    : "465",
+                     "mail.smtp.socketFactory.class"   : "javax.net.ssl.SSLSocketFactory",
+                     "mail.smtp.socketFactory.fallback": "false"]
+        }
+    }
 }
 
 endpoints {
@@ -155,7 +165,7 @@ dataSource {
 environments {
     development {
         dataSource {
-            dbCreate = 'create-drop'
+            dbCreate = 'update'
             url = 'jdbc:oracle:thin:@127.0.0.1:1521/orcl'
             username = 'roopa'
             password = 'roopa'

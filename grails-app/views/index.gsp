@@ -115,7 +115,7 @@
           <div class="form-group">
             <text class="control-label col-md-4" for="email"  style="text-align: left;">Email/Username *</text>
             <div class="col-md-8">
-              <input type="email" class="form-control" id="email" placeholder="Enter email" name="email">
+              <input type="text" class="form-control" id="email" placeholder="Enter email" name="email">
             </div>
           </div>
           <div class="form-group">
@@ -126,7 +126,7 @@
           </div>
           <div class="form-group">
             <div class=" col-md-10">
-              <g:link class="control-label col-md-8" style="text-align: left" controller="forgetPassword" action="forgetpassword">Forget Password</g:link>
+              <g:link class="control-label col-md-8" style="text-align: left" controller="forgotPassword" action="forgotPassword">forgot Password</g:link>
             </div>
             <div class=" offset-md-1">
               <button type="submit" class="btn btn-basic">Login</button>
@@ -178,10 +178,15 @@
           <div class="form-group">
             <text class="control-label col-md-4" for="password" style="text-align: left;">ConfirmPassword*</text>
             <div class="col-md-8">
-              <input type="password" class="form-control" id="confirmpassword" placeholder="Enter password again" name="confirmpassword" onfocusout="validatePassword()">
+              <input type="password" class="form-control" id="confirmpassword" placeholder="Enter password again" name="confirmpassword">%{--onfocusout="validatePassword()--}%
+              <g:if test = "${flash.message}">
+                <div class = "message" role="alertdialog">
+                  ${flash.message}
+                </div>
+              </g:if>
             </div>
             <div>
-            <span id="validate" style="color: #a60000"></span>
+            <span id="message" style="color: #a60000"></span>
             </div>
           </div>
 

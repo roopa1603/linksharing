@@ -1,3 +1,11 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: chaithra
+  Date: 26/07/19
+  Time: 12:50 AM
+--%>
+
+<%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
     <title>
@@ -5,9 +13,8 @@
     </title>
 </head>
 <body>
-<g:form url="[controller:'forgetPassword' , action : 'resetPassword']" class="form-horizontal">
+<g:form url="[controller:'forgotPassword' , action : 'updatePassword']" class="form-horizontal">
     <input type="hidden" id="hiddenEmail" name="hiddenEmail" value="">
-
     <div class="form-group">
         <text class="control-label col-md-4" for="email"  style="text-align: left;">
             Enter New Password
@@ -17,16 +24,14 @@
         </div>
     </div>
     <br>
-    %{--
-    <div class="form-group">
+    %{--<div class="form-group">
         <text class="control-label col-md-4" for="email"  style="text-align: left;">
             Confirm New Password
         </text>
         <div class="col-md-8">
             <input type="email" class="form-control" id="resetConfirmPass" placeholder="confirm Password" name="confirmPassword">
         </div>
-    </div>
---}%
+    </div>--}%
     <br>
     <div class=" offset-md-1">
         <button type="submit" class="btn btn-basic">
@@ -35,5 +40,4 @@
     </div>
 </g:form>
 </body>
-
 </html>
