@@ -1,107 +1,103 @@
 package linksharing
 
-import static org.springframework.http.HttpStatus.*
-import grails.transaction.Transactional
-
-@Transactional(readOnly = true)
 class TopicController {
+    def userService
+    def topicService
+    def topiclistService
 
-    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
-
-    def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        respond Topic.list(params), model:[topicCount: Topic.count()]
+    def newTopic(){
+        render(view:"topicShow")
     }
 
-    def show(Topic topic) {
-        respond topic
+    def topiclist() {
+        User u = User.findByEmail(session.name)
+        List subscriptionLt = userService.subscriptions(session.name)
+        List topiclist = topiclistService.serviceMethod()
+
+        render(view:'TopicList', model: [topiclists: topiclist,userdata: u,subscriptions:subscriptionLt])
     }
 
-    def create() {
-        respond new Topic(params)
+    def save() {
+        String email = session.name
+        topicService.save(params, email)
+
+        redirect(controller: "dashboard", action: "index")
+
     }
 
-    @Transactional
-    def save(Topic topic) {
-        if (topic == null) {
-            transactionStatus.setRollbackOnly()
-            notFound()
-            return
-        }
-
-        if (topic.hasErrors()) {
-            transactionStatus.setRollbackOnly()
-            respond topic.errors, view:'create'
-            return
-        }
-
-        topic.save flush:true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.created.message', args: [message(code: 'topic.label', default: 'Topic'), topic.id])
-                redirect topic
-            }
-            '*' { respond topic, [status: CREATED] }
-        }
+    def saveDoc(){
+        topicService.saveDoc(params,request,session.name)
+        redirect(controller: "dashboard", action: "index")
+    }
+    def saveLink(){
+        topicService.saveLink(params,request,session.name)
+        redirect(controller: "dashboard", action: "index")
     }
 
-    def edit(Topic topic) {
-        respond topic
+    def updateVisibility(params)
+    {
+        Topic t=Topic.get(params.id)
+        t.visibility=params.visibility
+        redirect(controller: "dashboard", action: "index")
+
     }
 
-    @Transactional
-    def update(Topic topic) {
-        if (topic == null) {
-            transactionStatus.setRollbackOnly()
-            notFound()
-            return
+
+    def topicshow() {
+        User user=User.findByEmail(session.name)
+        User user1 = User.findByEmail(session.name)
+        Long tid=0.0
+        println "+++++++++++++++++++++++++++++++++++++++params id+++++++++++++++++++++++++++++++++++++=++++++++++++++++"
+        print params.id
+        Long id = Long.parseLong(params.id)
+        Subscription sub = Subscription.get(id)
+
+        List subscriptionLt=userService.subscriptions(session.name)
+
+        if(sub){
+            Topic t = sub.topic
+            tid = t.id
+
+        }
+        else{
+            tid=id
         }
 
-        if (topic.hasErrors()) {
-            transactionStatus.setRollbackOnly()
-            respond topic.errors, view:'edit'
-            return
+
+        Long subscount = Subscription.createCriteria().count {
+            eq("topic.id", tid)
+        }
+        int postcount = Resource.createCriteria().count {
+            eq('topic.id', tid)
         }
 
-        topic.save flush:true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.updated.message', args: [message(code: 'topic.label', default: 'Topic'), topic.id])
-                redirect topic
-            }
-            '*'{ respond topic, [status: OK] }
+        List<Subscription> subscription = Subscription.createCriteria().list {
+            eq("topic.id", tid)
         }
-    }
+        List<User> users = subscription*.user
+        List<Long> userslist = users.collect { it.id }
 
-    @Transactional
-    def delete(Topic topic) {
 
-        if (topic == null) {
-            transactionStatus.setRollbackOnly()
-            notFound()
-            return
+        List subscriptioncount = topicService.subscriptioncount(userslist)
+
+        List postscount = topicService.topiccount(userslist)
+
+        List<Resource> resource = Resource.createCriteria().list {
+            eq("topic.id", tid)
         }
-
-        topic.delete flush:true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'topic.label', default: 'Topic'), topic.id])
-                redirect action:"index", method:"GET"
-            }
-            '*'{ render status: NO_CONTENT }
-        }
-    }
-
-    protected void notFound() {
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.not.found.message', args: [message(code: 'topic.label', default: 'Topic'), params.id])
-                redirect action: "index", method: "GET"
-            }
-            '*'{ render status: NOT_FOUND }
-        }
+        println "------------------------"
+        render(view:"topicShow" ,
+                model : [user:user,subs:sub ,
+                         subscount:subscount ,
+                         postcount : postcount ,
+                         subscription:subscription,
+                         subscriptions : subscriptionLt,
+                         subscriptioncount:subscriptioncount ,
+                         postscount:postscount,
+                         resources:resource,
+                         userdata:user1,
+                         subscriptions : subscriptionLt])
     }
 }
+
+

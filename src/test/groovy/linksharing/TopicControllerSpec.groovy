@@ -4,7 +4,7 @@ import grails.test.mixin.*
 import spock.lang.*
 
 @TestFor(TopicController)
-@Mock(Topic)
+@Mock(TopicService)
 class TopicControllerSpec extends Specification {
 
     def populateValidParams(params) {
@@ -38,7 +38,7 @@ class TopicControllerSpec extends Specification {
         when:"The save action is executed with an invalid instance"
             request.contentType = FORM_CONTENT_TYPE
             request.method = 'POST'
-            def topic = new Topic()
+            def topic = new TopicService()
             topic.validate()
             controller.save(topic)
 
@@ -49,14 +49,14 @@ class TopicControllerSpec extends Specification {
         when:"The save action is executed with a valid instance"
             response.reset()
             populateValidParams(params)
-            topic = new Topic(params)
+            topic = new TopicService(params)
 
             controller.save(topic)
 
         then:"A redirect is issued to the show action"
             response.redirectedUrl == '/topic/show/1'
             controller.flash.message != null
-            Topic.count() == 1
+            TopicService.count() == 1
     }
 
     void "Test that the show action returns the correct model"() {
@@ -68,7 +68,7 @@ class TopicControllerSpec extends Specification {
 
         when:"A domain instance is passed to the show action"
             populateValidParams(params)
-            def topic = new Topic(params)
+            def topic = new TopicService(params)
             controller.show(topic)
 
         then:"A model is populated containing the domain instance"
@@ -84,7 +84,7 @@ class TopicControllerSpec extends Specification {
 
         when:"A domain instance is passed to the edit action"
             populateValidParams(params)
-            def topic = new Topic(params)
+            def topic = new TopicService(params)
             controller.edit(topic)
 
         then:"A model is populated containing the domain instance"
@@ -103,7 +103,7 @@ class TopicControllerSpec extends Specification {
 
         when:"An invalid domain instance is passed to the update action"
             response.reset()
-            def topic = new Topic()
+            def topic = new TopicService()
             topic.validate()
             controller.update(topic)
 
@@ -114,7 +114,7 @@ class TopicControllerSpec extends Specification {
         when:"A valid domain instance is passed to the update action"
             response.reset()
             populateValidParams(params)
-            topic = new Topic(params).save(flush: true)
+            topic = new TopicService(params).save(flush: true)
             controller.update(topic)
 
         then:"A redirect is issued to the show action"
@@ -136,16 +136,16 @@ class TopicControllerSpec extends Specification {
         when:"A domain instance is created"
             response.reset()
             populateValidParams(params)
-            def topic = new Topic(params).save(flush: true)
+            def topic = new TopicService(params).save(flush: true)
 
         then:"It exists"
-            Topic.count() == 1
+            TopicService.count() == 1
 
         when:"The domain instance is passed to the delete action"
             controller.delete(topic)
 
         then:"The instance is deleted"
-            Topic.count() == 0
+            TopicService.count() == 0
             response.redirectedUrl == '/topic/index'
             flash.message != null
     }

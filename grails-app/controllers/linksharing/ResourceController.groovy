@@ -6,102 +6,41 @@ import grails.transaction.Transactional
 @Transactional(readOnly = true)
 class ResourceController {
 
-    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
+    def userService
+    def resourceService
 
-    def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        respond Resource.list(params), model:[resourceCount: Resource.count()]
-    }
-
-    def show(Resource resource) {
-        respond resource
-    }
-
-    def create() {
-        respond new Resource(params)
-    }
-
-    @Transactional
-    def save(Resource resource) {
-        if (resource == null) {
-            transactionStatus.setRollbackOnly()
-            notFound()
-            return
+    def index() {
+        if (!session.name) {
+            render("Login reqired")
         }
+        else {
+            Resource res = Resource.get(params.id)
+            List trending = userService.trendtopics()
 
-        if (resource.hasErrors()) {
-            transactionStatus.setRollbackOnly()
-            respond resource.errors, view:'create'
-            return
-        }
+            List trending1=trending.collect{it.id}
+            println "trending1>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+trending1
+            List subcount = userService.subscriptioncount(trending1)
+            List postcount = userService.postscount(trending1)
 
-        resource.save flush:true
+            render(view: "rating", model: [resource: res, trending: trending, countforsubs: subcount, countforposts:postcount])
 
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.created.message', args: [message(code: 'resource.label', default: 'Resource'), resource.id])
-                redirect resource
-            }
-            '*' { respond resource, [status: CREATED] }
+
         }
     }
 
-    def edit(Resource resource) {
-        respond resource
-    }
 
-    @Transactional
-    def update(Resource resource) {
-        if (resource == null) {
-            transactionStatus.setRollbackOnly()
-            notFound()
-            return
-        }
-
-        if (resource.hasErrors()) {
-            transactionStatus.setRollbackOnly()
-            respond resource.errors, view:'edit'
-            return
-        }
-
-        resource.save flush:true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.updated.message', args: [message(code: 'resource.label', default: 'Resource'), resource.id])
-                redirect resource
-            }
-            '*'{ respond resource, [status: OK] }
+    def editread() {
+        if (!session.name) {
+            render("Login required")
+        } else {
+            resourceService.editreadMethod(params, session.name)
+            redirect(controller: "dashboard", action: "index")
         }
     }
 
-    @Transactional
-    def delete(Resource resource) {
-
-        if (resource == null) {
-            transactionStatus.setRollbackOnly()
-            notFound()
-            return
-        }
-
-        resource.delete flush:true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'resource.label', default: 'Resource'), resource.id])
-                redirect action:"index", method:"GET"
-            }
-            '*'{ render status: NO_CONTENT }
-        }
+    def delete() {
+        resourceService.deleteMethod(params)
+        redirect(controller: "dashboard", action: "index")
     }
 
-    protected void notFound() {
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.not.found.message', args: [message(code: 'resource.label', default: 'Resource'), params.id])
-                redirect action: "index", method: "GET"
-            }
-            '*'{ render status: NOT_FOUND }
-        }
-    }
 }
