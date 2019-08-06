@@ -3,7 +3,7 @@ package linksharing
 class TopicController {
     def userService
     def topicService
-    def topiclistService
+    def topicListService
 
     def newTopic(){
         render(view:"topicShow")
@@ -12,17 +12,27 @@ class TopicController {
     def topiclist() {
         User u = User.findByEmail(session.name)
         List subscriptionLt = userService.subscriptions(session.name)
-        List topiclist = topiclistService.serviceMethod()
+        List topiclist = topicListService.serviceMethod()
 
-        render(view:'TopicList', model: [topiclists: topiclist,userdata: u,subscriptions:subscriptionLt])
+        render(view:'TopicList', model: [topiclists: topiclist,
+                                         userdata: u,
+                                         subscriptions:subscriptionLt])
     }
 
     def save() {
-        String email = session.name
-        topicService.save(params, email)
+        Topic t = Topic.findByName(params.topicName)
+        List myList = topicService.postOfUser(session.name)
+        boolean var = myList.contains(t)
+        if(var){
+            flash.message11 = "Topic Already exists!!"
+            redirect(controller: "dashboard", action: "index")
+        }else {
+            String email = session.name
+            topicService.save(params, email)
 
-        redirect(controller: "dashboard", action: "index")
-
+            redirect(controller: "dashboard", action: "index")
+            flash.message11 = "CREATED A NEW TOPIC!!!!!"
+        }
     }
 
     def saveDoc(){
@@ -38,8 +48,16 @@ class TopicController {
     {
         Topic t=Topic.get(params.id)
         t.visibility=params.visibility
+        t.save(flush:true)
         redirect(controller: "dashboard", action: "index")
 
+    }
+    def delete(){
+        Long tid = Long.parseLong(params.id)
+        Topic topic = Topic.findById(tid)
+        topic.delete(flush: true)
+        flash.message13 = "YOU HAV DELETED A TOPIC!!!!"
+        redirect(action: 'topiclist')
     }
 
 
@@ -47,7 +65,6 @@ class TopicController {
         User user=User.findByEmail(session.name)
         User user1 = User.findByEmail(session.name)
         Long tid=0.0
-        println "+++++++++++++++++++++++++++++++++++++++params id+++++++++++++++++++++++++++++++++++++=++++++++++++++++"
         print params.id
         Long id = Long.parseLong(params.id)
         Subscription sub = Subscription.get(id)
@@ -87,7 +104,8 @@ class TopicController {
         }
         println "------------------------"
         render(view:"topicShow" ,
-                model : [user:user,subs:sub ,
+                model : [user:user,
+                         subs:sub ,
                          subscount:subscount ,
                          postcount : postcount ,
                          subscription:subscription,

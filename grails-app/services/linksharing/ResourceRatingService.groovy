@@ -8,41 +8,43 @@ class ResourceRatingService {
     def saveMethod(params) {
         print "very much inside"
 
-        int rating=Integer.parseInt(params.value)
-        User user=Users.findByEmail(params.username)
+        int rating =Integer.parseInt(params.value)
+        User user=User.findByEmail(params.username)
         Long resourceId= Long.parseLong(params.resourceId)
         Resource res=Resource.get(resourceId)
         ResourceRating resRate=ResourceRating.createCriteria().get{
-            eq('owner.id',user.id)
+            eq('userRated.id',user.id)
             eq('resource.id',res.id)
         }
         if(resRate)
         {
-            resRate.rating=rating
+            resRate.score=rating
             resRate.save()
         }
-        else{
-            ResourceRating resourceRate = new ResourceRating(rating:rating)
+        else {
+            ResourceRating resourceRate = new ResourceRating(score: rating, userrated: user, resource: res)
+            resourceRate.save(failOnError: true)
             user.addToResourceRated(resourceRate)
-            res.addToRatings(resourceRate)
-            user.save(failOnError: true)
-            res.save(failOnError: true)
-            resourceRate.save(failOnError: true)}
-        print "very much outside"
-
+            res.addToResourceRated(resourceRate)
+            user.save(flush: true, failOnError: true)
+            res.save(flush: true, failOnError: true)
+            //resourceRate.save(flush:true , failOnError: true)}
+            print "very much outside"
+        }
 
     }
 
-    def readMethod(username , Resource res)
+    def readMethod(username, Resource res)
     {
-        User user=User.findByEmail(username)
+        User user =User.findByEmail(username)
         ResourceRating resRate=ResourceRating.createCriteria().get{
-            eq('owner.id',user.id)
+            eq('userRated.id',user.id)
             eq('resource.id',res.id)
         }
         if(resRate)
         {
-            return resRate.rating
+            return resRate.score
+            //resRate.score.save()
         }
         else
             return 0

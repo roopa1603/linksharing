@@ -52,7 +52,14 @@ class UserService {
                     return it.getAt(0)
             }
 
-        }.collect{it.getAt(0)}
+        }.collect{
+            if (!it) {
+                return 0
+            } else {
+                return it.getAt(0)
+            }
+        }
+            return counts
         return counts
     }
     else {
@@ -102,7 +109,7 @@ class UserService {
 
     def trendtopics()
     {
-        List <Long> topicsid=Topic.list().collect{
+        /*List <Long> topicsid=Topic.list().collect{
             it.id
         }
 
@@ -135,19 +142,43 @@ class UserService {
         xyz.removeAll{it==0}
         List bbb= xyz+(topicsid-xyz)
         println ">>>>>>>>>>>>>>>>bbb"+bbb
-        /*List <Topic> topicstrendy=Topic.createCriteria().list{
+        List <Topic> topicstrendy=Topic.createCriteria().list{
             inList('id' , bbb)
 
-        }*/
+        }
         List<Topic> topicList1 = []
         def i
         for(i=0;i<5;i++){
             topicList1.add(Topic.get(bbb[i]))
         }
         println "topic List:"+topicList1
-        return topicList1
+        return topicList1*/
+        List interTopic = Topic.createCriteria().list {
+            eq('visibility', com.sample.Visibility.PUBLIC)
+        }.sort { a, b -> b.resourceHas.size() <=> a.resourceHas.size() }
+        List<Topic> tl = []
+        def i = 0
+        while (i < 5 && interTopic.size() > i) {
+            tl.add(interTopic.get(i))
+            i++
+        }
+        return tl
 
     }
+
+    /*def trendtopics() {
+        List interTopic = Topic.createCriteria().list {
+            eq('visibility', com.sample.Visibility.PUBLIC)
+        }.sort { a, b -> b.resourceHas.size() <=> a.resourceHas.size() }
+        List<Topic> tl = []
+        def i = 0
+        while (i < 5 && interTopic.size() > i) {
+            tl.add(interTopic.get(i))
+            i++
+        }
+        return tl
+    }*/
+
 
     /*for particualr trending topic post and subscriptions*/
 
@@ -181,6 +212,11 @@ class UserService {
         }
         return x
     }
+
+
+
+
+
 
     def topTopicSubs(List<Topic> trending)
     {

@@ -9,14 +9,15 @@ class DocumentController {
 
         Long id=Long.parseLong(params.id)
         println "id:"+id
-        DocumentResource dr = (DocumentResource) Resource.get(id)
+        DocumentResource dr = DocumentResource.get(id)
 
 
         //Users user = session.user
         User user=User.findByEmail(session.name)
-        def file=new File("/home/chaithra/Downloads/grailsDocs/")
+        def file=new File("/home/roopa/Downloads/GRAILS_Doc")
 
-        def temp = new File("/home/chaithra/grailsproject/git/LinkSharingApplication/grails-app/assets/documents/"+dr.path)
+        def temp = new File('/home/roopa/projects/linksharing/grails-app/assets/document'+dr.path)
+
         if (temp.exists()) {
             file = temp
         } else {
@@ -30,12 +31,12 @@ class DocumentController {
     }
 
 
-    def save()
+    /*def save()
     {
         documentService.saveMethod(params,session.uname,request)
         redirect(controller:"Dashboard" , action:"index")
 
-    }
+    }*/
 
 
 

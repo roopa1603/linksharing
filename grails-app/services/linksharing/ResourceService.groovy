@@ -1,7 +1,8 @@
 package linksharing
 
 import grails.transaction.Transactional
-
+import com.sample.Seriousness
+import com.sample.Visibility
 @Transactional
 class ResourceService {
     def displayunread(String username) {
@@ -104,6 +105,7 @@ class ResourceService {
     {
         Resource res= Resource.get(Long.parseLong(params.id))
         res.delete()
+        res.save()
     }
 
 }

@@ -12,6 +12,12 @@
         }
     </script>
     <style>
+    li {
+        list-style-type: none;
+    }
+    ul {
+        list-style-type: none;
+    }
     body{
         background: #fff3f3;
     }
@@ -58,8 +64,12 @@
                 <div class="container col-md-12" style="background: #f7ecb5">
                     <div class="col-md-5">
                         <h2 style="color: #f7e1b5">
-                            <g:link controller="dashboard" action="index"><strong> <u><b>
-                                Link Sharing</b></u></strong>
+                            <g:link controller="dashboard" action="index">
+                                <strong>
+                                    <u><b>
+                                        Link Sharing
+                                    </b></u>
+                                </strong>
                             </g:link>
                         </h2>
                     </div>
@@ -88,9 +98,9 @@
                             </td>
 
                             <td width=30px style="text-align:center;">
-                               %{-- <button type="button" class="btn btn-info btn-group-sm" data-toggle="modal" style="caret-color: #48802c"   data-target="#invite"><i class="material-icons">
-                                mail_outline
-                            </i></button>--}%
+                                %{-- <button type="button" class="btn btn-info btn-group-sm" data-toggle="modal" style="caret-color: #48802c"   data-target="#invite"><i class="material-icons">
+                                 mail_outline
+                             </i></button>--}%
                                 <a href="" data-toggle="modal" title="SEND INVITATION" data-target="#invite"><i class="material-icons">mail_outline</i></a>
                             </td>
 
@@ -131,6 +141,9 @@
                                 </div>
                             </td>
                         </table>
+                        <div>
+                            ${flash.message11}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -180,27 +193,36 @@
                         <li>
                             <div class="row">
                                 <div class="col-md-4">
-                                    <asset:image src="${userdata.photo}" style="width:60px;height:60px"></asset:image></div>
+                                    <asset:image src="${us.topic.createdBy.photo}" style="width:60px;height:60px"></asset:image></div>
                                 <div class="col-sm-8">
                                     <div style="font-size:23px;">
                                         <g:link controller="topic" action="topicshow" params="[id: us.id]"> ${us.topic.name} </g:link>
 
                                     </div>
                                     <div>@${us.topic.createdBy.username}</div>
-                                    <div class="col-sm-6">
+                                    <div class="row">
+                                    <div class="col-md-4">
                                         Subscriptions:
-                                        <div>${subscount.getAt(i) }</div></div>
-                                    <div class="col-sm-6">
+                                        <div>
+                                            ${subscount.getAt(i)}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-offset-8">
                                         Posts:
-                                        <div><a>${resourcecount.get(i)}</a></div></div>
+                                        <div>
+                                            ${resourcecount.get(i)}
+                                        </div>
+                                    </div>
+                                    </div>
 
                                     <g:link controller="subscription" action="changesub" params="[id:us.id ,  flag:0]">Unsubscribe</g:link></div>
 
                                 <g:if test  = "${us.topic.createdBy.email==session.name}" >
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <ul class="list-inline">
+                                            <ul>
                                                 <li>
+                                                    <div class="col-md-8">
                                                     <g:form controller="subscription" action="updateSerious">
                                                         <g:field type="hidden" name="id" value="${us.id}"></g:field>
                                                         <g:select onChange="submit()" name="seriousness" from="${['SERIOUS','CASUAL','VERY_SERIOUS']}"
@@ -244,12 +266,19 @@
                         <li>
                             <div class="row">
                                 <div class="col-md-4">
-                                    <asset:image src="${userdata.photo}" alt="photo here" style="width:70px;height:70px"/>
+                                    <asset:image src="${us.createdBy.photo}" alt="photo here" style="width:70px;height:70px"/>
                                 </div>
                                 <div class="col-sm-8">
                                     <div style="font-size:15px;">
-                                        <g:link controller="topic" action="index" params="[id: us]"><b>${us.name}</g:link></b></div>
-                                    <div>@${us.createdBy.username}</div>
+                                        <g:link controller="topic" action="index" params="[id: us]">
+                                            <b>
+                                            ${us.name}
+                                        </g:link>
+                                            </b>
+                                    </div>
+                                    <div>
+                                        @${us.createdBy.username}
+                                    </div>
 
                                     <div class="col-sm-6">
                                         Subscriptions:
@@ -259,13 +288,27 @@
                                         Posts:
                                         <div><a>${topic1.getAt(i)}</a></div></div>
                                 </div>
-
-                                <g:link controller="subscription" action="subscribe" params="[id:us.id ,page:"dashboard"]">Subscribe</g:link>
+                                <div>
+                                    <g:if test="${us.subscriptionHas.user.email.contains(session.name)}">
+                                        <g:link controller="Subscription" action="unsubscribe" params="[id:us.id, page :'dashboard']">
+                                            Unsubscribe
+                                        </g:link>
+                                        <br><hr>
+                                    </g:if>
+                                    <g:else>
+                                        <g:link controller="Subscription" action="subscribe" params="[id:us.id, page:'dashboard']">
+                                            Subscribe
+                                        </g:link>
+                                        <br><hr>
+                                    </g:else>
+                                </div>
+%{--                                <g:link controller="subscription" action="subscribe" params="[id:us.id ,page:"dashboard"]">Subscribe</g:link>--}%
 
                         </li>
                     </g:each>
                 </div>
             </div>
+
             %{--send invitation here--}%
             <div class="modal fade"  id="invite" role="dialog">
                 <div class="modal-dialog">
@@ -315,29 +358,39 @@
                                     <asset:image src="${res.user.photo}"  style="width:70px;height:70px"/></div>
                                 <div class="col-sm-9">
                                     <div class="row">
-                                        <div class="col-sm-4">
-                                            <b>${res.user.firstName}&nbsp${res.user.lastName}</b></div>
-                                        <div class="col-sm-5">@${res.user.username}</div>
-                                        <a class=col-sm-3>${res.topic.name}</a></div>
-                                    <div class="row">
-                                        ${res.description}
+                                        %{--<div class="col-sm-4">--}%
+                                            %{--<b>${res.user.firstName}&nbsp${res.user.lastName}</b></div>--}%
+                                        <div class="col-sm-5">
+                                        <b>
+                                            @${res.user.username}
+                                        </b>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <b>TOPIC: ${res.topic.name}</b>
+                                        </div>
                                     </div>
+                                    <div class="row">
+                                     <p>${res.description}</p>
+                                    </div>
+                                    <br>
                                 <div class="row">
                                 <div class="col-md-3">
                                     <g:if test="${res instanceof linksharing.LinkResource}">
-                                        <a >Download</a>
+                                        %{--<a >Download</a>--}%
                                         </div>
                                         <div class="col-md-3">
-                                            <a href="${res.Linkurl}">View Full Site</a>
-                                        </div></g:if>
+                                            <a href="${res.Linkurl}" target="_blank">
+                                                View Full Site
+                                            </a>
+                                        </div>
+                                    </g:if>
                                     <g:else>
-
-
                                         <g:link controller="Document" action="download" params="[id:res.id , tid:res.id , flag:1]" >Download</g:link>
                                         </div>
-                                        <div class="col-md-3">
+                                        %{--<div class="col-md-3">
                                             <a href="">View Full Site</a>
-                                        </div></g:else>
+                                        </div>--}%
+                                    </g:else>
 
                                     <div class="col-md-3">
                                         <g:link controller="resource" action="editread" params="[id:res.id]">Mark as read</g:link>
@@ -348,10 +401,10 @@
 
                                     </div>
                                 </div>
+                                <hr>
                             </div>
                         </li>
                     </g:each>
-
                 </div>
 
             </div>
@@ -450,10 +503,10 @@
                     <input type="submit" class="btn btn-success" style="float: right; margin-top: 5px;"/>
                 </g:form>
             </div>
-            <div class="modal-footer" style=" margin-top: 15px;">
-                %{--<button type="button" class="btn btn-warning" onclick="resetTopicForm()">Reset</button>--}%
+            %{--<div class="modal-footer" style=" margin-top: 15px;">
+                --}%%{--<button type="button" class="btn btn-warning" onclick="resetTopicForm()">Reset</button>--}%%{--
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
+            </div>--}%
         </div>
     </div>
 </div>

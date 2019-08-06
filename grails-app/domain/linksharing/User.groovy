@@ -14,7 +14,11 @@ class User {
     //Date dateUpdated
     //Reading_Item reading_item
     //Resource_Rating resource_rating
-    static hasMany = [subscribedTo:Subscription, topics:Topic, resources:Resource, readItem:ReadingItem, resourceRated:ResourceRating]
+    static hasMany = [subscribedTo:Subscription,
+                      topics:Topic,
+                      resources:Resource,
+                      readItem:ReadingItem,
+                      resourceRated:ResourceRating]
 
     static constraints = {
         email(unique:true,email:true)
@@ -30,4 +34,5 @@ class User {
     static mapping={
         table 'Users'
     }
+
 }

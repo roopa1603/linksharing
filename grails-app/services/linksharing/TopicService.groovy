@@ -25,6 +25,14 @@ class TopicService {
         u.save(flush:true , failOnError : true)
 
     }
+    def postOfUser(String name){
+        User u = User.findByEmail(name)
+        List<Topic> listOfPosts = Topic.createCriteria().list{
+            projections{
+                eq('createdBy', u)
+            }
+        }
+    }
 
 
     def saveDoc(params,request,email) {
@@ -44,7 +52,7 @@ class TopicService {
 
         // '/home/rishabh/project/grails-app/assets/documents/' + username + filename
 
-        String fpath = '/home/chaithra/grailsproject/git/LinkSharingApplication/grails-app/assets/documents/' + str
+        String fpath = '/home/roopa/projects/linksharing/grails-app/assets/document' + str
         File des = new File(fpath)
         f.transferTo(des)
 

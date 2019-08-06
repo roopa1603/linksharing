@@ -1,4 +1,4 @@
-var validatePassword=function()  {
+/*var validatePassword=function()  {
 
 
     var password = document.getElementById("password").value;
@@ -11,16 +11,16 @@ var validatePassword=function()  {
         document.getElementById("validate").innerHTML = "Match"
         //return true;
     }
+}*/
+var validate_email = function() {
+
+    var email = document.getElementById("email").value;
+    var lemail = document.getElementByEmail(params.email).value;
+
+    if(email!=lemail){
+
+        document.getElementById("validate").innerHTML = "Enter valid email"
+    }else{
+        document.getElementById("validate").innerHTML = "Valid email"
+    }
 }
-
-/*
-
-$('#password, #confirmpassword').on('keyup', function () {
-    if ($('#password').val() == $('#confirm_password').val()) {
-        $('#validate').html('Matching').css('color', 'green');
-    } else
-        $('#message').html('Not Matching').css('color', 'red');
-});
-
-*/
-

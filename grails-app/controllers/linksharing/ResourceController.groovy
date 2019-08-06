@@ -7,13 +7,17 @@ import grails.transaction.Transactional
 class ResourceController {
 
     def userService
+    def resourceRatingService
     def resourceService
 
     def index() {
         if (!session.name) {
-            render("Login reqired")
+            render("Login required")
         }
         else {
+            User u = User.findByEmail(session.name)
+            List SubscriptionLt = userService.subscriptions(session.name)
+
             Resource res = Resource.get(params.id)
             List trending = userService.trendtopics()
 
@@ -22,7 +26,16 @@ class ResourceController {
             List subcount = userService.subscriptioncount(trending1)
             List postcount = userService.postscount(trending1)
 
-            render(view: "rating", model: [resource: res, trending: trending, countforsubs: subcount, countforposts:postcount])
+            def rating = resourceRatingService.readMethod(session.name,res)
+
+
+            render(view: "index", model: [userdata:u,
+                                            subscriptions: SubscriptionLt,
+                                           resource: res,
+                                            value: rating,
+                                          trending: trending,
+                                          countforsubs: subcount,
+                                          countforposts:postcount])
 
 
         }
@@ -41,6 +54,17 @@ class ResourceController {
     def delete() {
         resourceService.deleteMethod(params)
         redirect(controller: "dashboard", action: "index")
+    }
+    def postlist() {
+        if(!session.name){
+            render("please login first")
+        }else{
+            User user = User.findByEmail(session.name)
+            List subscriptionLt = userService.subscriptions(session.name)
+            List resources = Resource.list()
+            render(view:'postlist',model:[list:resources,userdata:user,subscriptions:subscriptionLt])
+
+        }
     }
 
 }

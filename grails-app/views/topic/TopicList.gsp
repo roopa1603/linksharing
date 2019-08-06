@@ -12,58 +12,15 @@
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js"></script>
 
     <style>
-    .topnav {
-        overflow: hidden;
-        background-color: #333;
-        height: 53px;
-    }
-    .topnav a {
-        float: left;
-        display: block;
-        color: white;
-        text-align: center;
-        padding: 14px 16px;
-        text-decoration: none;
-        font-size: 17px;
-    }
-    .topnav a:hover {
-        background-color: #ddd;
-        color: black;
-    }
-    .topnav a.active {
-        background-color: #4CAF50;
-        color: white;
-    }
-    .topnav .search-container {
-        float: right;
-    }
-    .topnav input[type=text] {
-        padding: 6px;
-        margin-top: 8px;
-        font-size: 17px;
-        border: none;
-    }
-    .topnav .search-container button {
-        float: right;
-        padding: 6px 10px;
-        margin-top: 8px;
-        margin-right: 16px;
-        background: #ddd;
-        font-size: 17px;
-        border: none;
-        cursor: pointer;
-    }
-    .topnav .search-container button:hover {
-        background: #ccc;
-    }
-    .topnav .search-container button {
-        height: 36px;
+    body{
+        background: #fff3f3;
     }
     </style>
+
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
     .dropbtn {
-        background-color: #d58512;
+        background-color: #ce8483;
         color: white;
         padding: 16px;
         font-size: 16px;
@@ -91,20 +48,20 @@
     .dropdown:hover .dropdown-content {display: block;}
     .dropdown:hover .dropbtn {background-color: #3e8e41;}
     </style>
-    <script>
-        function display(){
-            document.getElementById("droped").style.display="block";
-        }
-    </script>
+
 </head>
 <body>
-<div class="container">
+<span class="container">
     <div class="row">
         <div class="panel panel-default">
             <div class="panel-body">
-                <div class="container col-md-12" style="background: #31b0d5">
+                <div class="container col-md-12" style="background: #f7ecb5">
                     <div class="col-md-5">
-                        <h2 style="color: #a60000"><g:link controller="dashboard" action="index"><strong> <u><b>Link Sharing</b></u></strong></g:link></h2>
+                        <h2 style="color: #f7e1b5">
+                            <g:link controller="dashboard" action="index"><strong> <u><b>
+                                Link Sharing</b></u></strong>
+                            </g:link>
+                        </h2>
                     </div>
                     <div class="col-md-7">
                         <table class="table">
@@ -124,28 +81,32 @@
                                 </div>
                             </td>
                             <td width=10px style="text-align:center;"}>
-                                <button type="button" class="btn btn-info btn-group-sm" data-toggle="modal" data-target="#topicModal">
-                                    <i class="material-icons">chat_bubble_outline</i></button>
+                                %{--<button type="button" class="btn btn-info btn-group-sm" data-toggle="modal"    data-target="#topicModal">
+                                    <i class="material-icons">chat_bubble_outline</i></button>--}%
+                                <a href="" data-toggle="modal" title="CREATE NEW TOPIC" data-target="#topicModal">
+                                    <i class="material-icons">chat_bubble_outline</i>
+                                </a>
 
                             </td>
 
-                            <td width=30px style="text-align:center;"><button type="button" class="btn btn-info btn-group-sm" data-toggle="modal" style="caret-color: #48802c"   data-target="#invite"><i class="material-icons">
-                                mail_outline
-                            </i></button>
+                            <td width=30px style="text-align:center;">
+                                <a href="" data-toggle="modal" title="SEND INVITATION" data-target="#invite">
+                                    <i class="material-icons">mail_outline</i>
+                                </a>
+
                             </td>
 
-                            <td width=30px> <button type="button" class="btn btn-info btn-group-sm" data-toggle="modal"   data-target="#resource"><i class="material-icons" style="text-align:center;">
-                                attach_file
-                            </i></button>
+                            <td width=30px>
+                                <a href="" data-toggle="modal"title="SHARE DOCUMENT" data-target="#resource">
+                                    <i class="material-icons">attach_file</i>
+                                </a>
                             </td>
 
-                            <td width=30px><button type="button" class="btn btn-info btn-group-sm" data-toggle="modal"   data-target="#linkresource"><i class="material-icons" style="text-align:center;">description
-                            </i></button>
+                            <td width=30px>
+                                <a href="" data-toggle="modal" title="SHARE LINK DOCUMENT" data-target="#linkresource">
+                                    <i class="material-icons">description</i>
+                                </a>
                             </td>
-
-                            %{-- <td width=40px style="text-align:right;"><i class="material-icons">face</i>
-                             </td>--}%
-
                             <td width=30px>
 
                                 <div class="dropdown" >
@@ -173,8 +134,11 @@
         </div>
     </div>
 
-    <h2>Users List</h2>
-    <p>The table represent the all users</p>
+    <h2>TOPIC LIST</h2>
+    <p>The table represents the all topics created by the particular users.</p>
+    <div>
+        ${flash.message13}
+    </div>
     <table id="example" class="table table-striped table-bordered">
         <thead>
         <tr>
@@ -182,6 +146,7 @@
             <th>Topicname</th>
             <th>Username</th>
             <th>Visibility</th>
+            <th>Delete</th>
 
         </tr>
         </thead>
@@ -192,6 +157,14 @@
                 <td>${topic.name}</td>
                 <td>${topic.createdBy.username}</td>
                 <td>${topic.visibility}</td>
+                <g:if test="${linksharing.User.findByEmail(session.name).admin}">
+                    <td>
+                        <g:link controller="topic" action="delete" params="[id:topic.id]">Delete</g:link>
+                    </td>
+                </g:if>
+                <g:else>
+                    <td></td>
+                </g:else>
 
             </tr>
         </g:each>

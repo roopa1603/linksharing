@@ -14,7 +14,6 @@ class SignupService {
         if(confirmpassword.compareTo(password)!=0)
         {
             return 0
-
         }
         else
         {
@@ -34,11 +33,18 @@ class SignupService {
             String fName = f.getOriginalFilename()
             def image = username+fName
 
-            String loc='/home/chaithra/grailsproject/git/LinkSharingApplication/grails-app/assets/images/' + image
+            String loc='/home/roopa/projects/linksharing/grails-app/assets/document' + image
             File des=new File(loc)
             f.transferTo(des)
 
-            User userr = new User(firstName: firstname,lastName: lastname,email:email,username:username,password:password,admin:admin,active:active,photo:image)
+            User userr = new User(firstName: firstname,
+                                lastName: lastname,
+                                email:email,
+                                username:username,
+                                password:password,
+                                admin:admin,
+                                active:active,
+                                photo:image)
             userr.save(flush:true,failOnError:true,validate:true)
 
 

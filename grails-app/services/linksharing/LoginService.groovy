@@ -5,29 +5,28 @@ import grails.transaction.Transactional
 @Transactional
 class LoginService {
 
-    Boolean loginMethod(String userEmail, String enteredPassword) {
-        Boolean flag = false
+    Boolean isUserAlreadyLoggedIn(String userEmail, String enteredPassword) {
+        Boolean isUserAlreadyLoggedIn = false
 /*        if(userEmail || enteredPassword)
         {
-            flag = false
+            isUserAlreadyLoggedIn = false
         }*/
         if(userEmail && enteredPassword)
         {
             String storedPassword = User.findByEmail(userEmail)?.password
-            flag  = storedPassword == enteredPassword
+            isUserAlreadyLoggedIn  = storedPassword == enteredPassword
             /* if (storedPassword == enteredPassword)
              {
-                 flag = true
+                 isUserAlreadyLoggedIn = true
  //                redirect(controller: "dashboard",action:"index")
              }
              else
              {
                  //render(text: "password mismath")
-                 flag = false
+                 isUserAlreadyLoggedIn = false
 
              }*/
         }
-        return flag
-
+        return isUserAlreadyLoggedIn
     }
 }

@@ -5,19 +5,19 @@ import grails.transaction.Transactional
 @Transactional
 class ForgotPasswordService {
 
-    def validateEmail(Map params)
-    {
-        String email = params.fetch_email
+    def mailService
+
+    def validateEmail(Map params) {
+        String email = params.email
         User userExist = User.findByEmail(email)
-        if(userExist)
-        {
-            return userExist
-        }
-        else {
-            return null
+        if (userExist) {
+            return 1
+        } else {
+            return 0
         }
     }
-    def resetPassword(Map params, String email){
+
+    def resetPassword(Map params, String email) {
         String password = params.newpassword
 
         User u1 = User.findByEmail(email)
@@ -25,4 +25,5 @@ class ForgotPasswordService {
         u1.save(failOnError: true, flush: true)
 
     }
+
 }

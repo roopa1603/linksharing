@@ -22,10 +22,16 @@
         }
     </script>
 
+    <style>
+    body{
+        background: #fff3f3;
+    }
+    </style>
+
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
     .dropbtn {
-        background-color: #d58512;
+        background-color: #ce8483;
         color: white;
         padding: 16px;
         font-size: 16px;
@@ -60,9 +66,13 @@
     <div class="row">
         <div class="panel panel-default">
             <div class="panel-body">
-                <div class="container col-md-12" style="background: #31b0d5">
+                <div class="container col-md-12" style="background: #f7ecb5">
                     <div class="col-md-5">
-                        <h2 style="color: #a60000"><g:link controller="dashboard" action="index"><strong> <u><b>Link Sharing</b></u></strong></g:link></h2>
+                        <h2 style="color: #f7e1b5">
+                            <g:link controller="dashboard" action="index"><strong> <u><b>
+                                Link Sharing</b></u></strong>
+                            </g:link>
+                        </h2>
                     </div>
                     <div class="col-md-7">
                         <table class="table">
@@ -82,28 +92,32 @@
                                 </div>
                             </td>
                             <td width=10px style="text-align:center;"}>
-                                <button type="button" class="btn btn-info btn-group-sm" data-toggle="modal"    data-target="#topicModal">
-                                    <i class="material-icons">chat_bubble_outline</i></button>
+                                %{--<button type="button" class="btn btn-info btn-group-sm" data-toggle="modal"    data-target="#topicModal">
+                                    <i class="material-icons">chat_bubble_outline</i></button>--}%
+                                <a href="" data-toggle="modal" title="CREATE NEW TOPIC" data-target="#topicModal">
+                                    <i class="material-icons">chat_bubble_outline</i>
+                                </a>
 
                             </td>
 
-                            <td width=30px style="text-align:center;"><button type="button" class="btn btn-info btn-group-sm" data-toggle="modal" style="caret-color: #48802c"   data-target="#invite"><i class="material-icons">
-                                mail_outline
-                            </i></button>
+                            <td width=30px style="text-align:center;">
+                                <a href="" data-toggle="modal" title="SEND INVITATION" data-target="#invite">
+                                    <i class="material-icons">mail_outline</i>
+                                </a>
+
                             </td>
 
-                            <td width=30px> <button type="button" class="btn btn-info btn-group-sm" data-toggle="modal"   data-target="#resource"><i class="material-icons" style="text-align:center;">
-                                attach_file
-                            </i></button>
+                            <td width=30px>
+                                <a href="" data-toggle="modal"title="SHARE DOCUMENT" data-target="#resource">
+                                    <i class="material-icons">attach_file</i>
+                                </a>
                             </td>
 
-                            <td width=30px><button type="button" class="btn btn-info btn-group-sm" data-toggle="modal"   data-target="#linkresource"><i class="material-icons" style="text-align:center;">description
-                            </i></button>
+                            <td width=30px>
+                                <a href="" data-toggle="modal" title="SHARE LINK DOCUMENT" data-target="#linkresource">
+                                    <i class="material-icons">description</i>
+                                </a>
                             </td>
-
-                            %{-- <td width=40px style="text-align:right;"><i class="material-icons">face</i>
-                             </td>--}%
-
                             <td width=30px>
 
                                 <div class="dropdown" >
@@ -144,6 +158,7 @@
                         <td class="table-header">Lastname</td>
                         <td class="table-header">Active</td>
                         <td class="table-header">Manage</td>
+                        <td class="table-header">Admin</td>
                     </tr>
                     <g:each in="${userList}" var="user">
                         <tr>
@@ -165,6 +180,15 @@
                                 <td><g:link class="anchor-nounderline" controller="user" action="activate"
                                             params="[userId: user.id]">Deactivated</td></g:link>
                             </g:else>
+                            <g:if test="${user.admin}">
+                                <td><g:link class="anchor-nounderline" controller="user" action="removeAdmin"
+                                            params="[userId: user.id]">Admin</td></g:link>
+                            </g:if>
+                            <g:else>
+                                <td><g:link class="anchor-nounderline" controller="user" action="makeAdmin"
+                                            params="[userId: user.id]">notAdmin</td></g:link>
+                            </g:else>
+
                         </tr>
                     </g:each>
                 </table>

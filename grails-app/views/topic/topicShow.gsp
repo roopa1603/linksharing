@@ -25,6 +25,43 @@
             $(".topicForm").trigger("reset");
         }
     </script>
+    <style>
+    body{
+        background: #fff3f3;
+    }
+    </style>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+    .dropbtn {
+        background-color: #ce8483;
+        color: white;
+        padding: 16px;
+        font-size: 16px;
+        border: none;
+    }
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f1f1f1;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+    }
+    .dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+    }
+    .dropdown-content a:hover {background-color: #ddd;}
+    .dropdown:hover .dropdown-content {display: block;}
+    .dropdown:hover .dropbtn {background-color: #3e8e41;}
+    </style>
 
 </head>
 <body>
@@ -33,9 +70,13 @@
     <div class="row">
         <div class="panel panel-default">
             <div class="panel-body">
-                <div class="container col-md-12" style="background: #31b0d5">
+                <div class="container col-md-12" style="background: #f7ecb5">
                     <div class="col-md-5">
-                        <h2 style="color: #a60000"><g:link controller="dashboard" action="index"><strong> <u><b>Link Sharing</b></u></strong></g:link></h2>
+                        <h2 style="color: #f7e1b5">
+                            <g:link controller="dashboard" action="index"><strong> <u><b>
+                                Link Sharing</b></u></strong>
+                            </g:link>
+                        </h2>
                     </div>
                     <div class="col-md-7">
                         <table class="table">
@@ -55,49 +96,50 @@
                                 </div>
                             </td>
                             <td width=10px style="text-align:center;"}>
-                                <button type="button" class="btn btn-info btn-group-sm" data-toggle="modal"    data-target="#topicModal">
-                                    <i class="material-icons">chat_bubble_outline</i></button>
+                                %{--<button type="button" class="btn btn-info btn-group-sm" data-toggle="modal"    data-target="#topicModal">
+                                    <i class="material-icons">chat_bubble_outline</i></button>--}%
+                                <a href="" data-toggle="modal" title="CREATE NEW TOPIC" data-target="#topicModal">
+                                    <i class="material-icons">chat_bubble_outline</i>
+                                </a>
 
                             </td>
 
-                            <td width=30px style="text-align:center;"><button type="button" class="btn btn-info btn-group-sm" data-toggle="modal" style="caret-color: #48802c"   data-target="#invite"><i class="material-icons">
-                                mail_outline
-                            </i></button>
+                            <td width=30px style="text-align:center;">
+                                <a href="" data-toggle="modal" title="SEND INVITATION" data-target="#invite">
+                                    <i class="material-icons">mail_outline</i>
+                                </a>
+
                             </td>
 
-                            <td width=30px> <button type="button" class="btn btn-info btn-group-sm" data-toggle="modal"   data-target="#resource"><i class="material-icons" style="text-align:center;">
-                                attach_file
-                            </i></button>
+                            <td width=30px>
+                                <a href="" data-toggle="modal"title="SHARE DOCUMENT" data-target="#resource">
+                                    <i class="material-icons">attach_file</i>
+                                </a>
                             </td>
 
-                            <td width=30px><button type="button" class="btn btn-info btn-group-sm" data-toggle="modal"   data-target="#linkresource"><i class="material-icons" style="text-align:center;">description
-                            </i></button>
+                            <td width=30px>
+                                <a href="" data-toggle="modal" title="SHARE LINK DOCUMENT" data-target="#linkresource">
+                                    <i class="material-icons">description</i>
+                                </a>
                             </td>
-
-                            %{-- <td width=40px style="text-align:right;"><i class="material-icons">face</i>
-                             </td>--}%
-
                             <td width=30px>
 
                                 <div class="dropdown" >
-                                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">${userdata.username}
-                                        <span class="caret" onclick="display()" ></span></button>
-                                    <ul class="dropdown-menu" id="droped" style="width: 100%">
+                                    <button class="btn btn-primary" >${userdata.username}
+                                    </button>
+                                    <div class="dropdown-content">
 
                                         <g:if test="${userdata.admin==true}">
-                                            <li><a href="/User/myaction">profile</a></li>
-                                            <li><a href="/user/showlist" >Users</a></li>
-                                            <li><a href="/topic/topiclist">Topics</a></li>
-                                            <li><a href="/user/logout">Logout</a></li>
-
+                                            <a href="/User/myaction">profile</a>
+                                            <a href="/user/showlist" >Users</a>
+                                            <a href="/topic/topiclist">Topics</a>
+                                            <a href="/user/logout">Logout</a>
                                         </g:if>
                                         <g:else>
-                                            <li><a href="/User/myaction">profile</a></li>
-                                            <li><a href="/user/logout">Logout</a></li>
-
+                                            <a href="/User/myaction">profile</a>
+                                            <a href="/user/logout">Logout</a>
                                         </g:else>
-
-                                    </ul>
+                                    </div>
                                 </div>
                             </td>
                         </table>
@@ -208,7 +250,7 @@
 
                 <div class="panel-body">
                     <div class="col-md-3">
-                        <g:img src="${userdata.photo}"  style="width:60px;height:60px"/>
+                        <g:img src="${subs.topic.createdBy.photo}"  style="width:60px;height:60px"/>
                     </div>
 
                     <div class="col-md-9">
@@ -240,7 +282,7 @@
                             </g:form>--}%
                             <g:form controller="subscription" action="updateSeriouss">
                                 <g:field type="hidden" name="id" value="${subs.id}"></g:field>
-                                <g:select onChange="submit()" name="seriousness" from="${['SERIOUS','CASUAL','VERY_SERIOUS']}"
+                                <g:select onChange="submit()" name="Seriousness" from="${['SERIOUS','CASUAL','VERY_SERIOUS']}"
                                           value="${subs.seriousness}" />
                             </g:form>
 
@@ -261,7 +303,7 @@
 
                         <div class="row">
                             <div class="col-md-4">
-                                <asset:image src="${userdata.photo}" style="width:60px;height:60px"/></div>
+                                <asset:image src="${us.user.photo}" style="width:60px;height:60px"/></div>
 
                             <div class="col-sm-8">
                                 <div style="font-size:23px;"><b>${us.user.firstName}&nbsp${us.user.lastName}</b></div>
@@ -306,33 +348,34 @@
                             <asset:image src="${userdata.photo}" style="width:60px;height:60px"/>
                         </div>
 
-                        <div class="col-md-8">${res.description}
+                        <div class="col-md-8">
+                            <p>${res.description}</p>
+                            <br>
                         <div class="row">
                             <div class="col-md-3">
                             <g:if test="${res instanceof linksharing.LinkResource}">
-                                    <a>Download</a>
+                                <a href="${res.Linkurl}">View Full Site</a>
                             </div>
                                 <div class="col-md-3">
-
-                                    <a href="${res.Linkurl}">View Full Site</a>
+                                    %{--<a>Download</a>--}%
                                 </div>
                             </g:if>
                             <g:else>
-                                <g:link controller="Document" action="download" params="[id:res.id , tid:subs.id]" >Download</g:link></div>
+                                <g:link controller="document" action="download" params="[id:res.id , tid:subs.id]" >Download</g:link></div>
                             <div class="col-md-3">
-                                <a >View Full Site</a>
+                               %{-- <a >View Full Site</a>--}%
                                 </div>
                             </g:else>
 
                             <div class="col-md-3">
                                 %{--<a>Mark as read</a>--}%
-                                <g:link controller="Resource" action="index" params="[id:res.id]" >View post</g:link>
+                                <g:link controller="resource" action="index" params="[id:res.id]" >View post</g:link>
                             </div>
                         </div>
                         </div>
 
                     </div>
-                    </br>
+                    <br>
                 </g:each>
             </div>
         </div>

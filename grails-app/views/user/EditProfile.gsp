@@ -8,6 +8,20 @@
         function display(){
             document.getElementById("droped").style.display="block";
         }
+        var validatePassword=function()  {
+            var password = document.getElementById("password").value;
+            var confirmPassword = document.getElementById("confirmpassword").value;
+            if (password != confirmPassword) {
+                document.getElementById("validate" ).innerHTML= "Not Match!!!!"
+                //alert("Passwords are not same")
+                /*document.getElementById("password").value = "";
+                document.getElementById("confirmpassword").value = "";*/
+                //return false;
+            } else{
+                document.getElementById("validate").innerHTML = "Match!!!!"
+                //return true;
+            }
+        }
     </script>
 
 
@@ -24,20 +38,20 @@
     </script>
     <style>
     body{
-        background: #bce8f1;
+        background: #fff3f3;
     }
     </style>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
     .dropbtn {
-        background-color: #d58512;
+        background-color: #ce8483;
         color: white;
         padding: 16px;
         font-size: 16px;
         border: none;
     }
-    /*.dropdown {
+    .dropdown {
         position: relative;
         display: inline-block;
     }
@@ -57,7 +71,7 @@
     }
     .dropdown-content a:hover {background-color: #ddd;}
     .dropdown:hover .dropdown-content {display: block;}
-    .dropdown:hover .dropbtn {background-color: #3e8e41;}*/
+    .dropdown:hover .dropbtn {background-color: #3e8e41;}
     </style>
 
 </head>
@@ -66,7 +80,7 @@
     <div class="row">
         <div class="panel panel-default">
             <div class="panel-body">
-                <div class="container col-md-12" style="background: #31b0d5">
+                <div class="container col-md-12" style="background: #f7ecb5">
                     <div class="col-md-5">
                         <h2 style="color: #a60000"><g:link controller="dashboard" action="index"><strong> <u><b>Link Sharing</b></u></strong></g:link></h2>
                     </div>
@@ -88,23 +102,26 @@
                                 </div>
                             </td>
                             <td width=10px style="text-align:center;"}>
-                                <button type="button" class="btn btn-info btn-group-sm" data-toggle="modal"    data-target="#topicModal">
-                                    <i class="material-icons">chat_bubble_outline</i></button>
-
+                                <a href="" data-toggle="modal" title="CREATE TOPIC" data-target="#invite">
+                                    <i class="material-icons">chat_bubble_outline</i>
+                                </a>
+                            </td>
+                            <td width="30px">
+                            <a href="" data-toggle="modal"title="SEND INVITATION" data-target="#resource">
+                                <i class="material-icons">mail_outline</i>
+                            </a>
                             </td>
 
-                            <td width=30px style="text-align:center;"><button type="button" class="btn btn-info btn-group-sm" data-toggle="modal" style="caret-color: #48802c"   data-target="#invite"><i class="material-icons">
-                                mail_outline
-                            </i></button>
+                           <td width=30px>
+                               <a href="" data-toggle="modal"title="SHARE DOCUMENT" data-target="#resource">
+                                   <i class="material-icons">attach_file</i>
+                               </a>
                             </td>
 
-                            <td width=30px> <button type="button" class="btn btn-info btn-group-sm" data-toggle="modal"   data-target="#resource"><i class="material-icons" style="text-align:center;">
-                                attach_file
-                            </i></button>
-                            </td>
-
-                            <td width=30px><button type="button" class="btn btn-info btn-group-sm" data-toggle="modal"   data-target="#linkresource"><i class="material-icons" style="text-align:center;">description
-                            </i></button>
+                            <td width=30px>
+                                <a href="" data-toggle="modal" title="SHARE LINK DOCUMENT" data-target="#linkresource">
+                                    <i class="material-icons">description</i>
+                                </a>
                             </td>
 
                             %{-- <td width=40px style="text-align:right;"><i class="material-icons">face</i>
@@ -176,19 +193,19 @@
                 <div class="form-group">
                     <text class="control-label col-md-4" for="email" style="text-align: left;">First Name *</text>
                     <div class="col-md-8">
-                        <input type="text" class="form-control" id="fname" placeholder="Enter firstname" name="fname">
+                        <input type="text" class="form-control" id="fname" name="fname" value="${userdata.firstName}">
                     </div>
                 </div>
                 <div class="form-group">
                     <text class="control-label col-md-4" for="email" style="text-align: left;">Last Name *</text>
                     <div class="col-md-8">
-                        <input type="text" class="form-control" name="lname" id="lname" placeholder="Enter lastname" >
+                        <input type="text" class="form-control" name="lname" id="lname" value="${userdata.lastName}" >
                     </div>
                 </div>
                 <div class="form-group">
                     <text class="control-label col-md-4" for="email" style="text-align: left;">Username *</text>
                     <div class="col-md-8">
-                        <input type="text" class="form-control" id="username" name="username" placeholder="Enter Username" >
+                        <input type="text" class="form-control" id="username" name="username" value="${userdata.username}" >
                     </div>
                 </div>
                 <div class="form-group">
@@ -216,13 +233,13 @@
                 <div class="form-group">
                     <text class="control-label col-md-4" for="pwd" style="text-align: left;">Password *</text>
                     <div class="col-md-8">
-                        <input type="password" class="form-control" id="email" placeholder="Password" name="password">
+                        <input type="password" class="form-control" id="pwd" placeholder="Password" name="password">
                     </div>
                 </div>
                 <div class="form-group">
-                    <text class="control-label col-md-4" for="pwd" style="text-align: left;">ConfirmPassword*</text>
+                    <text class="control-label col-md-4" for="confirmpassword" style="text-align: left;">ConfirmPassword*</text>
                     <div class="col-md-8">
-                        <input type="password" class="form-control" id="email" placeholder="Confirm password" name="confirmpass">
+                        <input type="password" class="form-control" id="confirmpassword" placeholder="Confirm password" name="confirmpassword" onfocusout="validatePassword()">
                     </div>
                 </div>
                 <div class="form-group">
