@@ -2,17 +2,23 @@ package linksharing
 
 import com.sample.Visibility
 
-//import java.beans.Visibility
-
 class Topic {
 
     String name
-    User createdBy
-    Visibility visibility
-
     Date dateCreated
+
+    // Long visibilityId = Visibility.PRIVATE.id
+    Visibility visibility
     Date lastUpdated
 
-    static belongsTo = [user: User]
-    static hasMany = [resources: Resource, subscriptions: Subscription]
+
+    static belongsTo = [createdBy:User]
+    static hasMany = [resourceHas:Resource,subscriptionHas:Subscription]
+
+
+    static constraints = {
+        //add conditional check for visibility id shall be driven from enum ids
+        //visibilityId nullable: true
+        // visibilityId inList: Visibility.values()*.id
+    }
 }

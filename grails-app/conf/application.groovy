@@ -1,5 +1,3 @@
-
-
 grails {
     profile = 'web'
     codegen {
@@ -107,7 +105,19 @@ grails {
             }
         }
     }
+
+    mail {
+        host = "smtp.gmail.com"
+        port = 465
+        username = "linksharing.roopa@gmail.com"
+        password = "roopa@1603"
+        props = ["mail.smtp.auth"                  : "true",
+                 "mail.smtp.socketFactory.port"    : "465",
+                 "mail.smtp.socketFactory.class"   : "javax.net.ssl.SSLSocketFactory",
+                 "mail.smtp.socketFactory.fallback": "false"]
+    }
 }
+
 
 endpoints {
     jmx {

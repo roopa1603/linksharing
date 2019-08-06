@@ -1,107 +1,121 @@
 package linksharing
 
-import static org.springframework.http.HttpStatus.*
-import grails.transaction.Transactional
-
-@Transactional(readOnly = true)
 class TopicController {
+    def userService
+    def topicService
+    def topicListService
 
-    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
-
-    def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        respond Topic.list(params), model:[topicCount: Topic.count()]
+    def newTopic(){
+        render(view:"topicShow")
     }
 
-    def show(Topic topic) {
-        respond topic
+    def topiclist() {
+        User u = User.findByEmail(session.name)
+        List subscriptionLt = userService.subscriptions(session.name)
+        List topiclist = topicListService.serviceMethod()
+
+        render(view:'TopicList', model: [topiclists: topiclist,
+                                         userdata: u,
+                                         subscriptions:subscriptionLt])
     }
 
-    def create() {
-        respond new Topic(params)
-    }
+    def save() {
+        Topic t = Topic.findByName(params.topicName)
+        List myList = topicService.postOfUser(session.name)
+        boolean var = myList.contains(t)
+        if(var){
+            flash.message11 = "Topic Already exists!!"
+            redirect(controller: "dashboard", action: "index")
+        }else {
+            String email = session.name
+            topicService.save(params, email)
 
-    @Transactional
-    def save(Topic topic) {
-        if (topic == null) {
-            transactionStatus.setRollbackOnly()
-            notFound()
-            return
-        }
-
-        if (topic.hasErrors()) {
-            transactionStatus.setRollbackOnly()
-            respond topic.errors, view:'create'
-            return
-        }
-
-        topic.save flush:true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.created.message', args: [message(code: 'topic.label', default: 'Topic'), topic.id])
-                redirect topic
-            }
-            '*' { respond topic, [status: CREATED] }
+            redirect(controller: "dashboard", action: "index")
+            flash.message11 = "CREATED A NEW TOPIC!!!!!"
         }
     }
 
-    def edit(Topic topic) {
-        respond topic
+    def saveDoc(){
+        topicService.saveDoc(params,request,session.name)
+        redirect(controller: "dashboard", action: "index")
+    }
+    def saveLink(){
+        topicService.saveLink(params,request,session.name)
+        redirect(controller: "dashboard", action: "index")
     }
 
-    @Transactional
-    def update(Topic topic) {
-        if (topic == null) {
-            transactionStatus.setRollbackOnly()
-            notFound()
-            return
-        }
+    def updateVisibility(params)
+    {
+        Topic t=Topic.get(params.id)
+        t.visibility=params.visibility
+        t.save(flush:true)
+        redirect(controller: "dashboard", action: "index")
 
-        if (topic.hasErrors()) {
-            transactionStatus.setRollbackOnly()
-            respond topic.errors, view:'edit'
-            return
-        }
-
-        topic.save flush:true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.updated.message', args: [message(code: 'topic.label', default: 'Topic'), topic.id])
-                redirect topic
-            }
-            '*'{ respond topic, [status: OK] }
-        }
+    }
+    def delete(){
+        Long tid = Long.parseLong(params.id)
+        Topic topic = Topic.findById(tid)
+        topic.delete(flush: true)
+        flash.message13 = "YOU HAV DELETED A TOPIC!!!!"
+        redirect(action: 'topiclist')
     }
 
-    @Transactional
-    def delete(Topic topic) {
 
-        if (topic == null) {
-            transactionStatus.setRollbackOnly()
-            notFound()
-            return
+    def topicshow() {
+        User user=User.findByEmail(session.name)
+        User user1 = User.findByEmail(session.name)
+        Long tid=0.0
+        print params.id
+        Long id = Long.parseLong(params.id)
+        Subscription sub = Subscription.get(id)
+
+        List subscriptionLt=userService.subscriptions(session.name)
+
+        if(sub){
+            Topic t = sub.topic
+            tid = t.id
+
+        }
+        else{
+            tid=id
         }
 
-        topic.delete flush:true
 
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'topic.label', default: 'Topic'), topic.id])
-                redirect action:"index", method:"GET"
-            }
-            '*'{ render status: NO_CONTENT }
+        Long subscount = Subscription.createCriteria().count {
+            eq("topic.id", tid)
         }
-    }
+        int postcount = Resource.createCriteria().count {
+            eq('topic.id', tid)
+        }
 
-    protected void notFound() {
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.not.found.message', args: [message(code: 'topic.label', default: 'Topic'), params.id])
-                redirect action: "index", method: "GET"
-            }
-            '*'{ render status: NOT_FOUND }
+        List<Subscription> subscription = Subscription.createCriteria().list {
+            eq("topic.id", tid)
         }
+        List<User> users = subscription*.user
+        List<Long> userslist = users.collect { it.id }
+
+
+        List subscriptioncount = topicService.subscriptioncount(userslist)
+
+        List postscount = topicService.topiccount(userslist)
+
+        List<Resource> resource = Resource.createCriteria().list {
+            eq("topic.id", tid)
+        }
+        println "------------------------"
+        render(view:"topicShow" ,
+                model : [user:user,
+                         subs:sub ,
+                         subscount:subscount ,
+                         postcount : postcount ,
+                         subscription:subscription,
+                         subscriptions : subscriptionLt,
+                         subscriptioncount:subscriptioncount ,
+                         postscount:postscount,
+                         resources:resource,
+                         userdata:user1,
+                         subscriptions : subscriptionLt])
     }
 }
+
+

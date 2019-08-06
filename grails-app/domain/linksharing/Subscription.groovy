@@ -1,14 +1,21 @@
 package linksharing
 
 import com.sample.Seriousness
+import org.hibernate.mapping.Table
 
 class Subscription {
+
     Topic topic
     User user
-
     Date dateCreated
     Seriousness seriousness
 
+    static belongsTo = [user:User, topic:Topic]
 
-    static belongsTo = [topics: Topic, users: User]
+    static constraints = {
+
+        //int countUbs = Subscription.countByUser(user)
+
+
+    }
 }

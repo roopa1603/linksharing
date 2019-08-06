@@ -1,6 +1,6 @@
 package com.sample
 
-public enum Visibility{
+enum Visibility{
     PUBLIC,
     PRIVATE
 
